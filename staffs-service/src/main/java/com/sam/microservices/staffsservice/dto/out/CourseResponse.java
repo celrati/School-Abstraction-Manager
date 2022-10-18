@@ -1,8 +1,9 @@
-package com.sam.microservices.coursesservice.dto.out;
+package com.sam.microservices.staffsservice.dto.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
