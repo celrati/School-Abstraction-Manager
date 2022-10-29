@@ -108,6 +108,19 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<image>
+						<name>achrafchar/schoolmanager-${project.artifactId}:${project.version}</name>
+						<publish>true</publish>
+					</image>
+					<pullPolicy>IF_NOT_PRESENT</pullPolicy>
+					<docker>
+						<publishRegistry>
+							<username>
+								achrafchar
+							</username>
+							<url>https://hub.docker.com/r/achrafchar/</url>
+						</publishRegistry>
+					</docker>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>

@@ -9,3 +9,6 @@ the staffs service   :  port=8100    // **  the database H2 for the staffs : htt
 the courses service  :  port=8101 
 
 need to start zipkin server on the port : 9411
+
+run the containers  
+docker run -d -p 9411:9411 openzipkin/zipkin
