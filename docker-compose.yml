@@ -1,0 +1,75 @@
+version: '3.6'
+
+services:
+
+  registery-service:
+    image: achrafchar/registery-service.0.0.1
+    ports:
+      - "8761:8761"
+    networks:
+      - sam-network
+
+  config-service:
+    image: achrafchar/config-service.0.0.1
+    ports:
+      - "8888:8888"
+    networks: 
+      - sam-network
+    depends_on:
+      - registery-service
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://registery-service:8761/eureka
+
+  gateway-service:
+    image: achrafchar/gateway-service.0.0.1
+    ports:
+      - "8765:8765"
+    networks:
+      - sam-network
+    depends_on:
+      - registery-service
+      - config-service
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://registery-service:8761/eureka
+      SPRING.CONFIG.IMPORT: optional:configserver:http://config-service:8888
+      SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411/
+
+  courses-service:
+    image: achrafchar/courses-service.0.0.1
+    ports:
+      - "8101:8101"
+    networks:
+      - sam-network
+    depends_on:
+      - registery-service
+      - config-service
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://registery-service:8761/eureka
+      SPRING.CONFIG.IMPORT: optional:configserver:http://config-service:8888
+      SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411/
+
+  staffs-service:
+    image: achrafchar/staffs-service.0.0.1
+    ports:
+      - "8100:8100"
+    networks:
+      - sam-network
+    depends_on:
+      - registery-service
+      - config-service
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://registery-service:8761/eureka
+      SPRING.CONFIG.IMPORT: optional:configserver:http://config-service:8888
+      SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411/
+
+  zipkin-server:
+      image: openzipkin/zipkin:2.23
+      ports:
+        - "9411:9411"
+      networks:
+        - sam-network
+      restart: always #Restart if there is a problem starting up
+
+
+networks:
+  sam-network:
