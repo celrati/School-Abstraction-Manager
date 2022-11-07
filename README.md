@@ -9,6 +9,10 @@ the staffs service   :  port=8100    // **  the database H2 for the staffs : htt
 the courses service  :  port=8101  
 the zipkin server    :  port=9411   
 
+to start swagger..
+http://localhost:8101/swagger-ui/index.html   
+http://localhost:8101/swagger-ui/index.html  
+
 build all the images with : ./build-images.sh  
 and run the docker-compose.yml  
 
