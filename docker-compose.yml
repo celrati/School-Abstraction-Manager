@@ -1,82 +1,40 @@
-version: '2.1'
+version: '3.5'
+
 
 services:
-
   registery-service:
     image: achrafchar/registery-service.0.0.1
+    container_name: registery-service
     ports:
-      - "8761:8761"
-    depends_on:
-      - config-service
+      - 8761:8761
     networks:
-      - sam-network
+      - samnet
 
   config-service:
     image: achrafchar/config-service.0.0.1
+    container_name: config-service
     ports:
-      - "8888:8888"
-    networks: 
-      - sam-network
+      - 8888:8888
     environment:
-      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://registery-service:8761/eureka
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://config-service:8888/actuator/health" ]
-      interval: 200s
-      timeout: 5s
-      retries: 5
-
-  gateway-service:
-    image: achrafchar/gateway-service.0.0.1
-    ports:
-      - "8765:8765"
+      - EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE=http://registery-service:8761/eureka
+      - SPRING_ZIPKIN_BASEURL=http://zipkin-service:9411/
     networks:
-      - sam-network
-    depends_on:
-      config-service:
-        condition: service_healthy
-    environment:
-      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://registery-service:8761/eureka
-      SPRING_CONFIG_IMPORT:  optional:configserver:http://config-service:8888
-      SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411/
+      - samnet
 
-  courses-service:
-    image: achrafchar/courses-service.0.0.1
+  zipkin-service:
+    image: openzipkin/zipkin:2.23
+    container_name: zipkin-service
     ports:
-      - "8101:8101"
+      - 9411:9411
+    restart: always #Restart if there is a problem starting up
     networks:
-      - sam-network
-    depends_on:
-      config-service:
-        condition: service_healthy
-    environment:
-      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://registery-service:8761/eureka
-      SPRING_CONFIG_IMPORT:  optional:configserver:http://config-service:8888
-      SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411/
-
-
-  staffs-service:
-    image: achrafchar/staffs-service.0.0.1
-    ports:
-      - "8100:8100"
-    networks:
-      - sam-network
-    depends_on:
-      config-service:
-        condition: service_healthy
-    environment:
-      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://registery-service:8761/eureka
-      SPRING_CONFIG_IMPORT:  optional:configserver:http://config-service:8888
-      SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411/
-
-
-  zipkin-server:
-      image: openzipkin/zipkin:2.23
-      ports:
-        - "9411:9411"
-      networks:
-        - sam-network
-      restart: always #Restart if there is a problem starting up
-
+      - samnet
 
 networks:
-  sam-network:
+  samnet:
+    name: sam-network1
+    driver: bridge
+
+
+
+

@@ -1,8 +1,8 @@
-FROM openjdk:11
+FROM openjdk:11.0.6-jre-slim-buster
 
  # Refer to Maven build -> finalName
 ARG JAR_FILE=./target/gateway-service-0.0.1-SNAPSHOT.jar
-RUN echo $(ls)
+
  # cd /opt/app
 WORKDIR /opt/app
 

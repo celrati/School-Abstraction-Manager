@@ -1,5 +1,12 @@
 #building docker images for the whole project
 
+#cleaning..
+docker kill $(docker ps -q)
+docker rmi --force $(docker images -q)
+docker volume prune
+docker network prune
+docker network create sam-network1
+
 #building the image for the config service.
 (cd ./config-service && ./mvnw clean install -Dmaven.test.skip=true)
 docker build -t achrafchar/config-service.0.0.1 ./config-service

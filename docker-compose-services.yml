@@ -1,0 +1,50 @@
+version: '3.5'
+
+services:
+
+  gateway-service:
+    image: achrafchar/gateway-service.0.0.1
+    container_name: gateway-service
+    ports:
+      - 8765:8765
+    environment:
+      - EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE=http://registery-service:8761/eureka
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-service:8888
+      - SPRING_ZIPKIN_BASEURL=http://zipkin-service:9411/
+    networks:
+      - sam-project_samnet
+
+  courses-service:
+    image: achrafchar/courses-service.0.0.1
+    container_name: courses-service
+    ports:
+      - 8101:8101
+    environment:
+      - EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE=http://registery-service:8761/eureka
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-service:8888
+      - SPRING_ZIPKIN_BASEURL=http://zipkin-service:9411/
+    networks:
+      - sam-project_samnet
+
+  staffs-service:
+    image: achrafchar/staffs-service.0.0.1
+    container_name: staffs-service
+    ports:
+      - 8100:8100
+    environment:
+      - EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE=http://registery-service:8761/eureka
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-service:8888
+      - SPRING_ZIPKIN_BASEURL=http://zipkin-service:9411/
+    networks:
+      - sam-project_samnet
+
+networks:
+  sam-project_samnet:
+    external:
+      name: sam-network1
+
+
+
+
+
+
