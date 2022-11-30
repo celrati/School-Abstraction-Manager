@@ -1,0 +1,14 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  application:
+    name: product-event-driven-service
+  config:
+    import: optional:configserver:http://localhost:8888
+server:
+  port: 8103
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
