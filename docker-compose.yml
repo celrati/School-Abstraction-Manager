@@ -30,6 +30,15 @@ services:
     networks:
       - samnet
 
+  axon-service:
+    image: axoniq/axonserver
+    container_name: axon-service
+    ports:
+      - 8024:8024
+      - 8124:8124
+    networks:
+      - samnet
+
 networks:
   samnet:
     name: sam-network1
